@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#2a7d34" />
+  <title>Grocery Buddy</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="manifest" href="manifest.webmanifest" />
+</head>
+<body>
+  <main class="app-shell">
+    <header>
+      <div class="logo">
+        <span>🛒</span>
+        <div>
+          <h1>Grocery Buddy</h1>
+          <p>Add, share and save your next shopping list</p>
+        </div>
+      </div>
+    </header>
+
+    <section class="card input-card">
+      <label for="itemInput">New grocery item</label>
+      <div class="input-row">
+        <input id="itemInput" type="text" placeholder="e.g. milk, eggs, bananas" autocomplete="off" />
+        <button id="addButton" type="button">Add</button>
+      </div>
+      <p class="hint">Items are stored locally on your Android device.</p>
+    </section>
+
+    <section class="card list-card">
+      <div class="list-header">
+        <h2>Your list</h2>
+        <div class="action-group">
+          <button id="shareButton" class="secondary">Share link</button>
+          <button id="clearButton" class="secondary">Clear all</button>
+        </div>
+      </div>
+      <ul id="groceryList" class="grocery-list"></ul>
+      <p id="emptyMessage" class="empty-message">Your list is empty. Add something to get started.</p>
+      <p class="hint">Share your list with your partner using the "Share link" button.</p>
+    </section>
+  </main>
+
+  <div class="footer-note">
+    Use this page on your Android browser and add it to your Home Screen for a quick app-like experience.
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

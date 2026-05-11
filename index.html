@@ -4,29 +4,41 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#2a7d34" />
-  <title>Grocery Buddy</title>
-  <link rel="stylesheet" href="styles.css" />
-  <link rel="manifest" href="manifest.webmanifest" />
+  <title>Pittas Grocery Buddy</title>
+  <link rel="icon" href="20250920_145407 copy.jpg" type="image/jpeg" />
 </head>
 <body>
   <main class="app-shell">
-    <header>
+    <header class="hero">
       <div class="logo">
         <span>🛒</span>
+        <img src="20250920_145407 copy.jpg" alt="Pittas Grocery Buddy Icon" class="logo-icon" /
+          <h1>Pittas Grocery Buddy</h1>
+          <p class="tagline">A fun shared grocery list for you and your partner.</p>
+        </div>
+      </div>
+      <div class="hero-badge">
+        <span class="sparkle">✨</span>
         <div>
-          <h1>Grocery Buddy</h1>
-          <p>Add, share and save your next shopping list</p>
+          <strong id="listCount">0 items</strong>
+          <small>ready to shop</small>
         </div>
       </div>
     </header>
 
     <section class="card input-card">
-      <label for="itemInput">New grocery item</label>
+      <label for="itemInput">What should we grab next?</label>
       <div class="input-row">
         <input id="itemInput" type="text" placeholder="e.g. milk, eggs, bananas" autocomplete="off" />
-        <button id="addButton" type="button">Add</button>
+        <button id="addButton" type="button">Add item</button>
       </div>
-      <p class="hint">Items are stored locally on your Android device.</p>
+      <div class="suggestion-row">
+        <button type="button" class="suggestion-chip" data-item="Bananas">🍌 Bananas</button>
+        <button type="button" class="suggestion-chip" data-item="Milk">🥛 Milk</button>
+        <button type="button" class="suggestion-chip" data-item="Bread">🍞 Bread</button>
+        <button type="button" class="suggestion-chip" data-item="Eggs">🥚 Eggs</button>
+      </div>
+      <p class="hint">Tap a suggestion or type your own item.</p>
     </section>
 
     <section class="card list-card">
@@ -40,6 +52,22 @@
       <ul id="groceryList" class="grocery-list"></ul>
       <p id="emptyMessage" class="empty-message">Your list is empty. Add something to get started.</p>
       <p class="hint">Share your list with your partner using the "Share link" button.</p>
+    </section>
+
+    <section class="card shared-card">
+      <div class="list-header">
+        <div>
+          <h2>Shared list</h2>
+          <small class="shared-note">Any visitor can add items and everyone sees the same list.</small>
+        </div>
+      </div>
+      <div class="input-row">
+        <input id="sharedInput" type="text" placeholder="Add to the shared list" autocomplete="off" />
+        <button id="sharedAddButton" type="button">Add</button>
+      </div>
+      <ul id="sharedList" class="grocery-list"></ul>
+      <p id="sharedEmptyMessage" class="empty-message">No shared items yet. Be the first to add one.</p>
+      <p class="hint">This list is shared with everyone who visits this page.</p>
     </section>
   </main>
 

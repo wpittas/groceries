@@ -11,9 +11,7 @@ const suggestionChips = document.querySelectorAll(".suggestion-chip");
 const sharedInput = document.getElementById("sharedInput");
 const sharedAddButton = document.getElementById("sharedAddButton");
 const sharedList = document.getElementById("sharedList");
-const sharedEmptyMessage = document.getElementById("sharedEmptyMessage");
-
-const sharedBackend = "https://crudcrud.com/api/d79efedb3d064348ac8687d31d786630/groceries";
+const refreshSharedButton = document.getElementById("refreshSharedButton");
 let sharedDocId = null;
 let sharedItems = [];
 
@@ -48,14 +46,17 @@ function getShareUrl() {
 
 async function fetchSharedDoc() {
   try {
+    console.log("Fetching shared list...");
     const response = await fetch(sharedBackend);
-    if (!response.ok) throw new Error("Could not load shared items");
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
     const results = await response.json();
+    console.log("Shared data:", results);
     if (results.length > 0) {
       sharedDocId = results[0]._id;
       sharedItems = Array.isArray(results[0].items) ? results[0].items : [];
     } else {
+      console.log("No shared doc, creating new one...");
       const createResponse = await fetch(sharedBackend, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -65,26 +66,33 @@ async function fetchSharedDoc() {
       const created = await createResponse.json();
       sharedDocId = created._id;
       sharedItems = [];
+      console.log("Created shared doc:", sharedDocId);
     }
   } catch (error) {
-    console.warn("Shared list error:", error);
+    console.error("Shared list error:", error);
     sharedItems = [];
+    alert("Shared list is temporarily unavailable. Try refreshing the page.");
   }
 }
 
 async function saveSharedItems() {
-  if (!sharedDocId) return;
+  if (!sharedDocId) {
+    console.warn("No shared doc ID, skipping save");
+    return;
+  }
 
   try {
+    console.log("Saving shared items:", sharedItems);
     const response = await fetch(`${sharedBackend}/${sharedDocId}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ items: sharedItems }),
     });
 
-    if (!response.ok) throw new Error("Could not save shared items");
+    if (!response.ok) throw new Error(`Save failed: ${response.status}`);
+    console.log("Shared items saved successfully");
   } catch (error) {
-    console.warn("Shared update failed:", error);
+    console.error("Shared update failed:", error);
     alert("Shared list update failed. Try again in a moment.");
   }
 }
@@ -113,11 +121,13 @@ function renderShared() {
       sharedItems.splice(index, 1);
       renderShared();
       await saveSharedItems();
+      console.log("Removed shared item at index", index);
     });
 
     listItem.append(label, removeButton);
     sharedList.appendChild(listItem);
   });
+  console.log("Shared list loaded with", sharedItems.length, "items");
 }
 
 async function loadShared() {
@@ -127,6 +137,7 @@ async function loadShared() {
 
 function addSharedItem() {
   const text = sharedInput.value.trim();
+  console.log("Added shared item:", text);
   if (!text) return;
 
   sharedItems.unshift(text);
@@ -192,9 +203,11 @@ if (sharedAddButton) {
   sharedAddButton.addEventListener("click", addSharedItem);
 }
 
-if (sharedInput) {
-  sharedInput.addEventListener("keydown", (event) => {
-    if (event.key === "Enter") addSharedItem();
+if (refreshSharedButton) {
+  refreshSharedButton.addEventListener("click", async () => {
+    refreshSharedButton.textContent = "Loading...";
+    await loadShared();
+    refreshSharedButton.textContent = "Refresh";
   });
 }
 
